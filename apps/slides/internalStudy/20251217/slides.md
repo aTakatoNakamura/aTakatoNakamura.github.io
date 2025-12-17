@@ -59,7 +59,7 @@ layout: center
 
 <div>
 
-TSKaigi は、「学び、繋がり、”型”を破ろう」をミッションに TypeScript に関するテーマを扱う日本最大級の技術カンファレンスの地方開催版
+TSKaigi は、「学び、繋がり、”型”を破ろう」をミッションに TypeScript に関するテーマを扱う日本最大級の技術カンファレンス。TSKaigi Hokurikuはその地方開催版
 
 昨年、京都で開催されたTSKaigi Kansai 2024 に続き
 
