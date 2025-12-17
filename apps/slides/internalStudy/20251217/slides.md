@@ -300,10 +300,10 @@ function square(x: number): number {
 }
 
 // シンプルなパイプ
-const result1 = 5 |> double;  // → (double)(5)
+const result1 = 5 |> double;  // → double(5)
 
 // チェーン可能
-const result2 = 5 |> square |> double;  // → (double)((square)(5))
+const result2 = 5 |> square |> double;  // → double(square(5))
 ```
 
 <div class="mt-6 p-4 bg-orange-500 bg-opacity-10 rounded">
