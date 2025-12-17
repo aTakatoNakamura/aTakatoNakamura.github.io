@@ -586,10 +586,10 @@ console.log(result);
 
 <div class="grid grid-cols-2 gap-1 mt-4 max-h-96">
   <div class="flex flex-col gap-1">
-    <img src="./kaijo.jpg" class="w-full rounded">
+    <img src="https://pbs.twimg.com/media/G8VzWM8bAAAZETS?format=jpg&name=large" class="w-full rounded">
     <img src="https://pbs.twimg.com/media/G6bgmUbagAARCpL?format=jpg&name=4096x4096" class="w-full rounded -mt-4 object-cover object-bottom max-h-64">
   </div>
-  <img src="./kani.jpg" class="w-full rounded">
+  <img src="https://pbs.twimg.com/media/G8VzWNaa4AIbebt?format=jpg&name=large" class="w-full rounded">
 </div>
 
 
