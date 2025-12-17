@@ -1,4 +1,5 @@
 ---
+routerMode: hash
 theme: seriph
 # background: https://cover.sli.dev
 title: TSKaigi HokurikuでLT登壇してきた話
