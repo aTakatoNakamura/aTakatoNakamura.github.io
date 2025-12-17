@@ -58,23 +58,37 @@ layout: center
 
 <div>
 
-TSKaigi は、「学び、繋がり、”型”を破ろう」をミッションに TypeScript に関するテーマを扱う日本最大級の技術カンファレンス
+TSKaigi は、「学び、繋がり、”型”を破ろう」をミッションに TypeScript に関するテーマを扱う日本最大級の技術カンファレンスの地方開催版
 
 昨年、京都で開催されたTSKaigi Kansai 2024 に続き
 
-今年は金沢で「TSKaigi Hokuriku 2025」が開催されました。
+今年は金沢で「[TSKaigi Hokuriku 2025](https://hokuriku.tskaigi.org/)」が開催されました。
 
 そこでLTをしてきたのでその内容と、現地の様子の共有です
 
-[写真]
+<img src="https://pbs.twimg.com/media/G6bgmUbagAARCpL?format=jpg&name=4096x4096" class="max-h-80 mx-auto">
 
 </div>
 
 ---
+layout: center
+class: text-center
+---
 
 # LTで話してきたこと
 
-パイプ演算子をTypeScriptに実装して遊ぶ話
+---
+
+# パイプ演算子をTypeScriptに実装してみた話
+
+## 動機
+
+- 今年東京で開催されたTSKaigiでtsgoの話などを聞いてtscに興味が湧いた
+- どうなってるのか知るためには拡張して遊んでみるのが理解が深まるかなと思って拡張してみることにした
+
+---
+
+# パイプ演算子とは
 
 <div class="grid grid-cols-2 gap-8 mt-8">
 
@@ -422,9 +436,8 @@ checkPipeExpressionという関数を新しく作ります。
 function emitPipeExpression(
   node: PipeExpression
 ) {
-  write("(");
   emit(node.right);
-  write(")(");
+  write("(");
   
   // 左辺がPipeなら再帰
   if (node.left.kind === SyntaxKind.PipeExpression) {
@@ -452,10 +465,10 @@ function emitPipeExpression(
 <div class="mt-4 text-sm">
 
 1. 外側の `|> double` を処理
-2. `(double)(...)` を出力
+2. `double(...)` を出力
 3. 左辺 `5 |> square` を再帰処理
-4. `(square)(5)` を出力
-5. 結果: `(double)((square)(5))`
+4. `square(5)` を出力
+5. 結果: `double(square(5))`
 
 </div>
 
@@ -487,48 +500,62 @@ emitPipeExpression自身を再帰的に呼び出します。
 この再帰処理が、チェーンされたパイプを正しく変換する鍵でした。
 -->
 
----
-layout: center
-class: text-center
+
 ---
 
-# まとめ
+# 実際にコンパイルしてみる
 
-<div class="mt-12 text-left max-w-2xl mx-auto">
+<div class="grid grid-cols-2 gap-6">
 
-<v-clicks>
+<div>
 
-- TypeScriptにパイプ演算子を実装
-- Parser, Checker, Emitterのあたりを実装でいけた
-- AIと一緒にやればなんとかできます。
+### TypeScript
 
-</v-clicks>
+```ts
+function square(x: number): number {
+  return x * x;
+}
+
+function double(x: number): number {
+  return x * 2;
+}
+
+const result = 5 |> square |> double;
+console.log(result);
+```
 
 </div>
 
-<div v-click class="mt-12 p-4 bg-blue-500 bg-opacity-10 rounded max-w-2xl mx-auto">
+<div>
 
-当然ですが、プロダクトで独自のTS実装をするのはやめた方がいいです。  
-あくまでお遊びで
+### JavaScript
+
+```js
+function square(x) {
+  return x * x;
+}
+
+function double(x) {
+  return x * 2;
+}
+
+const result = double(square(5));
+console.log(result);
+```
+
+<div class="mt-4 text-sm opacity-75">
+
+✨ パイプ演算子が関数呼び出しのネストに変換される
 
 </div>
 
-<!--
-最後にまとめます。
+</div>
 
-今日は、TypeScriptにパイプ演算子を実装した話をしました。
-Parser、Checker、Emitterの3ステップで実装し、
-特に、チェーンされたパイプを正しく処理するための再帰処理が鍵でした。
-
-コンパイラ実装は難しそうに思えますが、
-やってみると意外と楽しいです。
-AIと一緒にやればなんとかなります。
-皆さんもぜひ試してみてください！
--->
+</div>
 
 ---
 
-# 印象に残ったセッション
+# 印象に残ったセッション①
 
 ## [TypeScript 6.0で非推奨化されるオプションたち](https://speakerdeck.com/uhyo/typescript-6-dot-0defei-tui-jiang-hua-sareruopusiyontati)
 
@@ -537,6 +564,8 @@ AIと一緒にやればなんとかなります。
 
 ---
 
+# 印象に残ったセッション②
+
 ## [TypeScript AST を活用した 設計差分抽出の紹介](https://speakerdeck.com/takewell/introduction-to-design-difference-extraction-using-typescript-asta)
 
 - コードレビューの補助ツールとしてASTを活用して関数レベルの依存関係図やシーケンス図を生成できるようにしたという話
@@ -544,10 +573,55 @@ AIと一緒にやればなんとかなります。
 
 ---
 
+# 印象に残ったセッション③
+
 ## [フロントエンドにおける「型」の責務分離に対する1つのアプローチ](https://speakerdeck.com/kinocoboy2/hurontoendoniokeru-xing-noze-ren-fen-jie-nidui-suru1tunoapuroti)
 
 - フロントエンドは、ユーザー（人間）とシステム（機械）という性質の異なる 2 つの要素をつなぐインターフェースで、そのため、本質的に二重性を抱えており、これが型の複雑さを生み出している。
 - ユースケース駆動設計（Iconixプロセス）の観点でUI用の型をAPI用の型に変換する層を作る方法について説明していました。
+
+---
+
+# 会場の雰囲気
+
+<div class="grid grid-cols-2 gap-1 mt-4 max-h-96">
+  <div class="flex flex-col gap-1">
+    <img src="./kaijo.jpg" class="w-full rounded">
+    <img src="https://pbs.twimg.com/media/G6bgmUbagAARCpL?format=jpg&name=4096x4096" class="w-full rounded -mt-4 object-cover object-bottom max-h-64">
+  </div>
+  <img src="./kani.jpg" class="w-full rounded">
+</div>
+
+
+---
+layout: end
+---
+
+# まとめ
+
+<div class="text-left max-w-3xl mx-auto">
+
+<v-clicks>
+
+- **TSKaigi Hokuriku 2025**で登壇してきました
+  - パイプ演算子をTypeScriptに実装する話
+  - Parser、Checker、Emitterの3ステップで実装
+  
+- **印象に残ったセッション**
+  - TypeScript 6.0の非推奨化オプション
+  - AST活用した設計差分抽出
+  - フロントエンドの型の責務分離
+
+</v-clicks>
+
+<v-clicks>
+
+そのほかの登壇資料などをまとめてくれている人がいたので気になる方はこちらもどうぞ  
+[TSKaigi Hokuriku 2025 登壇資料・感想まとめ](https://zenn.dev/teamlab_fe/articles/8a96282a2d13d4#tskaigi-hokuriku-2025-%E7%99%BB%E5%A3%87%E8%B3%87%E6%96%99%E3%83%BB%E6%84%9F%E6%83%B3%E3%81%BE%E3%81%A8%E3%82%81)
+
+</v-clicks>
+
+</div>
 
 ---
 layout: end
